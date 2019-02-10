@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.5.0)
+set(REQUIRED_CPP_VERSION 17)
+
+set(PROJECT_NAME c)
+project(${PROJECT_NAME} CXX)
+add_executable(${PROJECT_NAME} src/main.cpp)
+
+if (WIN32 OR WIN64)
+  set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD ${REQUIRED_CPP_VERSION})
+  set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+  set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
+elseif(UNIX)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -std=c++${REQUIRED_CPP_VERSION}")
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread")
+  #set_property(TARGET ${TARGET_NAME} APPEND_STRING PROPERTY LINK_FLAGS " -fsanitize=thread")
+  target_link_libraries(${PROJECT_NAME} pthread)
+endif()
